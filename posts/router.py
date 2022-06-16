@@ -17,7 +17,10 @@ router = APIRouter(tags=["posts"], prefix="/api/v1/posts")
 
 @router.get("/", response_model=List[schemas.OutPosts])
 async def get_all_posts(user: int = None, database: Session = Depends(get_db)):
-    """Get all posts, return Posts by user id or All Posts"""
+    """
+    Get all posts
+    return Posts by user id or All Posts
+    """
 
     if not user:
         posts = await services.get_all_posts(database)
@@ -38,6 +41,7 @@ async def create_posts(
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
 ):
+    
     """Create new post"""
     
     await services.create_post(post, database, current_user.id)
@@ -65,6 +69,7 @@ async def delete_post_by_id(
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
 ):
+    
     """Delete post by id"""
 
     _post = await validators.post_exists(id, database)
@@ -91,6 +96,7 @@ async def update_post_by_id(
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
 ):
+    
     """Update post by id"""
 
     _post = await validators.post_exists(id, database)

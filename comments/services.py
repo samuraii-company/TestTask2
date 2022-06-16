@@ -8,6 +8,10 @@ from . import schemas
 
 
 def transaction(func):
+    """
+    Transaction Decorator
+    Commit all parts of tranaction or rollback
+    """
     async def wrapper(*args, **kwargs):
         try:
             return await func(*args, **kwargs)
@@ -83,6 +87,7 @@ async def update_comment(id: int, database: Session, comment_data: schemas.BaseC
 async def create_replies(
     replies: schemas.RepliesComment, database: Session, current_user: int
 ):
+    
     """Create new replies on comment"""
     _replies = models.Comments(
         text=replies.text,

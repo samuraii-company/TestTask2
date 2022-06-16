@@ -21,6 +21,7 @@ async def like(
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
 ):
+    
     """Add like on post or delete likes from post"""
 
     _post = await post_exists(like.post, database)

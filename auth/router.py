@@ -21,6 +21,7 @@ async def login(
     request: OAuth2PasswordRequestForm = Depends(),
     database: Session = Depends(db.get_db),
 ):
+    
     """Login request"""
 
     user = (

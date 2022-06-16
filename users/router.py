@@ -19,6 +19,7 @@ router = APIRouter(tags=["users"], prefix="/api/v1/users")
 @router.get("/", response_model=List[schemas.OutUser])
 async def get_all_users(database: Session = Depends(get_db)):
     """Get all users"""
+    
     users = await services.get_all_users(database)
     return users
 

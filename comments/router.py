@@ -20,6 +20,7 @@ router = APIRouter(tags=["comments"], prefix="/api/v1/comments")
 async def get_comments_by_post(
     post: int = Query(...), database: Session = Depends(get_db)
 ):
+
     """Get comments by post"""
 
     _post = await post_exists(post, database)
@@ -45,6 +46,7 @@ async def create_comment(
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
 ):
+
     """Create new comment"""
 
     _post = await post_exists(comment.post, database)
@@ -67,6 +69,7 @@ async def create_replies_on_comment(
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
 ):
+
     """Create new replies on comment"""
 
     _comment = await validators.comment_exists(replies.comment, database)
@@ -87,7 +90,8 @@ async def delete_comment(
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
 ):
-    """Delete comment"""
+
+    """Delete comment by id"""
 
     _comment = await validators.comment_exists(id, database)
     if not _comment:
@@ -113,7 +117,8 @@ async def update_comment_by_id(
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
 ):
-    """Update post"""
+
+    """Update comment by id"""
 
     _comment = await validators.comment_exists(id, database)
     if not _comment:
