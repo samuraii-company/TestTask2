@@ -38,6 +38,8 @@ async def create_posts(
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
 ):
+    """Create new post"""
+    
     await services.create_post(post, database, current_user.id)
 
     return JSONResponse(status_code=status.HTTP_201_CREATED, content="Post was created")
@@ -45,7 +47,8 @@ async def create_posts(
 
 @router.get("/{id}/", response_model=schemas.OutDetailPost)
 async def get_post_by_id(id: int, database: Session = Depends(get_db)):
-
+    """Get post by id"""
+    
     _post = await services.get_post_by_id(id, database)
 
     if not _post:
@@ -88,7 +91,7 @@ async def update_post_by_id(
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
 ):
-    """Update post"""
+    """Update post by id"""
 
     _post = await validators.post_exists(id, database)
     if not _post:
