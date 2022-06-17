@@ -4,7 +4,7 @@ from users import schemas, models
 from auth import hashing
 
 
-async def new_user_register(user: schemas.User, database: Session):
+async def new_user_register(user: schemas.User, database: Session) -> None:
     """Create new user"""
 
     _user = models.Users(

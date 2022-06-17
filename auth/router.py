@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
-
+from typing import TypedDict
 from .jwt import create_access_token
 from database import db
 from auth import hashing
@@ -13,6 +13,11 @@ from . import services
 from . import validators
 
 
+class TokenType(TypedDict):
+    access_token: str
+    token_type: str
+
+
 router = APIRouter(tags=["auth"])
 
 
@@ -20,8 +25,8 @@ router = APIRouter(tags=["auth"])
 async def login(
     request: OAuth2PasswordRequestForm = Depends(),
     database: Session = Depends(db.get_db),
-):
-    
+) -> TokenType | None:
+
     """Login request"""
 
     user = (
@@ -46,7 +51,9 @@ async def login(
 
 
 @router.post("/register", response_class=JSONResponse)
-async def register(user: schemas.User, database: Session = Depends(db.get_db)):
+async def register(
+    user: schemas.User, database: Session = Depends(db.get_db)
+) -> JSONResponse:
     """Create New User"""
 
     await validators.user_validation(user, database)

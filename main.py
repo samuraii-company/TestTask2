@@ -17,5 +17,5 @@ app.include_router(likes_router.router)
 
 
 @app.get("/")
-async def root():
+async def root() -> dict:
     return {"message": "Test Project API"}

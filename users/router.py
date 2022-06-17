@@ -17,15 +17,19 @@ router = APIRouter(tags=["users"], prefix="/api/v1/users")
 
 
 @router.get("/", response_model=List[schemas.OutUser])
-async def get_all_users(database: Session = Depends(get_db)):
+async def get_all_users(
+    database: Session = Depends(get_db),
+) -> List[schemas.OutUser] | None:
     """Get all users"""
-    
+
     users = await services.get_all_users(database)
     return users
 
 
 @router.get("/{id}/", response_model=schemas.OutUser)
-async def get_user_by_id(id: int, database: Session = Depends(get_db)):
+async def get_user_by_id(
+    id: int, database: Session = Depends(get_db)
+) -> schemas.OutUser | None:
     """Get user by id"""
 
     _user = await services.get_user_by_id(id, database)

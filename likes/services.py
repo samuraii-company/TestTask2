@@ -8,7 +8,7 @@ from . import schemas
 
 
 @transaction
-async def add_like(like: schemas.Like, database: Session, id: int):
+async def add_like(like: schemas.Like, database: Session, id: int) -> None:
     """Add like"""
 
     _like = models.Likes(post=like.post, user=id)
@@ -23,7 +23,7 @@ async def add_like(like: schemas.Like, database: Session, id: int):
 
 
 @transaction
-async def delete_like(like: schemas.Like, database: Session, id: int):
+async def delete_like(like: schemas.Like, database: Session, id: int) -> None:
     """Delete like"""
 
     _ = (  # noqa

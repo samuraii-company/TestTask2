@@ -1,4 +1,5 @@
 from sqlalchemy.orm import Session
+from typing import List
 import random
 
 from users import models as user_models
@@ -7,7 +8,7 @@ from . import models
 from . import schemas
 
 
-async def get_posts(id: int, database: Session):
+async def get_posts(id: int, database: Session) -> List[models.Posts] | None:
     """Get posts by query params id"""
 
     return (
@@ -18,7 +19,7 @@ async def get_posts(id: int, database: Session):
     )
 
 
-async def get_all_posts(database: Session):
+async def get_all_posts(database: Session) -> List[models.Posts] | None:
     """Get all posts"""
 
     _posts = database.query(models.Posts).join(user_models.Users).all()
@@ -27,7 +28,7 @@ async def get_all_posts(database: Session):
     return _posts
 
 
-async def create_post(post: schemas.Post, database: Session, author_id: int):
+async def create_post(post: schemas.Post, database: Session, author_id: int) -> None:
     """Create New Post"""
 
     _new_post = models.Posts(title=post.title, text=post.text, author=author_id)
@@ -37,16 +38,14 @@ async def create_post(post: schemas.Post, database: Session, author_id: int):
     database.refresh(_new_post)
 
 
-async def get_post_by_id(id: int, database: Session):
+async def get_post_by_id(id: int, database: Session) -> models.Posts | None:
     """Get post by id"""
 
     return database.query(models.Posts).filter(models.Posts.id == id).first()
 
 
-async def delete_post(id: int, database: Session):
+async def delete_post(id: int, database: Session) -> None:
     """Delete Post"""
-
-    _ = database.query(models.Posts).filter(models.Posts.id == id).first()
 
     database.query(models.Posts).filter(models.Posts.id == id).delete()
     database.commit()

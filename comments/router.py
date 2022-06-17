@@ -19,7 +19,7 @@ router = APIRouter(tags=["comments"], prefix="/api/v1/comments")
 @router.get("/", response_model=List[schemas.OutComments])
 async def get_comments_by_post(
     post: int = Query(...), database: Session = Depends(get_db)
-):
+) -> List[schemas.OutComments] | None:
 
     """Get comments by post"""
 
@@ -45,7 +45,7 @@ async def create_comment(
     comment: schemas.Comment,
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
-):
+) -> JSONResponse:
 
     """Create new comment"""
 
@@ -68,7 +68,7 @@ async def create_replies_on_comment(
     replies: schemas.RepliesComment,
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
-):
+) -> JSONResponse:
 
     """Create new replies on comment"""
 
@@ -89,7 +89,7 @@ async def delete_comment(
     id: int,
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
-):
+) -> JSONResponse:
 
     """Delete comment by id"""
 
@@ -116,7 +116,7 @@ async def update_comment_by_id(
     comment_data: schemas.BaseComment,
     database: Session = Depends(get_db),
     current_user: TokenData = Depends(get_current_user),
-):
+) -> JSONResponse:
 
     """Update comment by id"""
 

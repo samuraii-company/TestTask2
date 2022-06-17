@@ -14,7 +14,7 @@ ALGORITHM = cfg.ALGORITHM
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
 
-def create_access_token(data: dict):
+def create_access_token(data: dict) -> jwt:
     """Create access token"""
 
     to_encode = data.copy()
@@ -24,7 +24,7 @@ def create_access_token(data: dict):
     return encoded_jwt
 
 
-def verify_token(token: str, credentials_exception):
+def verify_token(token: str, credentials_exception) -> schemas.TokenData | None:
     """verify token"""
 
     try:
@@ -41,7 +41,7 @@ def verify_token(token: str, credentials_exception):
         raise credentials_exception
 
 
-def get_current_user(data: str = Depends(oauth2_scheme)):
+def get_current_user(data: str = Depends(oauth2_scheme)) -> schemas.TokenData | None:
     """Get current authenticated user"""
 
     credentials_exception = HTTPException(

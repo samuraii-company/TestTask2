@@ -7,7 +7,7 @@ from users import schemas
 MIN_PASSWORD_LENGTH = 9
 
 
-async def user_validation(user: schemas.User, database: Session):
+async def user_validation(user: schemas.User, database: Session) -> bool | None:
     """User Validation"""
 
     if not user.password == user.password2:

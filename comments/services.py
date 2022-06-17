@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
+from typing import List
 
 from posts.models import Posts
 
@@ -12,6 +13,7 @@ def transaction(func):
     Transaction Decorator
     Commit all parts of tranaction or rollback
     """
+
     async def wrapper(*args, **kwargs):
         try:
             return await func(*args, **kwargs)
@@ -25,7 +27,7 @@ def transaction(func):
     return wrapper
 
 
-async def get_comments(id: int, database: Session):
+async def get_comments(id: int, database: Session) -> List[models.Comments] | None:
     """Get comments by post"""
 
     return (
@@ -37,7 +39,7 @@ async def get_comments(id: int, database: Session):
 
 
 @transaction
-async def create_comment(comment: schemas.Comment, database: Session, id: int):
+async def create_comment(comment: schemas.Comment, database: Session, id: int) -> None:
     """Create new comment"""
 
     _comment = models.Comments(text=comment.text, author=id, post=comment.post)
@@ -55,7 +57,7 @@ async def create_comment(comment: schemas.Comment, database: Session, id: int):
 
 
 @transaction
-async def delete_comment(id: int, database: Session):
+async def delete_comment(id: int, database: Session) -> None:
     """Delete comment"""
 
     _comment = database.query(models.Comments).filter(models.Comments.id == id).first()
@@ -73,7 +75,9 @@ async def delete_comment(id: int, database: Session):
     database.commit()
 
 
-async def update_comment(id: int, database: Session, comment_data: schemas.BaseComment):
+async def update_comment(
+    id: int, database: Session, comment_data: schemas.BaseComment
+) -> None:
     """Update Comment"""
 
     database.query(models.Comments).filter(models.Comments.id == id).update(
@@ -86,8 +90,8 @@ async def update_comment(id: int, database: Session, comment_data: schemas.BaseC
 @transaction
 async def create_replies(
     replies: schemas.RepliesComment, database: Session, current_user: int
-):
-    
+) -> None:
+
     """Create new replies on comment"""
     _replies = models.Comments(
         text=replies.text,
